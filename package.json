@@ -21,7 +21,9 @@
 		"cli"
 	],
 	"dependencies": {
+		"chalk": "^4.1.0",
 		"fs-extra": "^9.1.0",
+		"lodash": "^4.17.21",
 		"meow": "^5.0.0",
 		"plist": "^3.0.1"
 	},
