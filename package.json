@@ -1,16 +1,15 @@
 {
-	"name": "unicorn-fun-cli",
-	"version": "0.0.0",
-	"description": "My awesome command-line tool",
+	"name": "wf-creator-plist-converter",
+	"version": "0.0.1",
+	"description": "",
 	"license": "MIT",
 	"repository": "YOUR-GITHUB-USERNAME/unicorn-fun-cli",
 	"author": {
-		"name": "YOUR NAME",
-		"email": "YOUR EMAIL",
-		"url": "YOUR WEBSITE"
+		"name": "jopemachine",
+		"email": "jopemachine@gmail.com"
 	},
 	"bin": {
-		"unicorn-fun": "cli.js"
+		"wf-creator-plist-converter": "cli.js"
 	},
 	"engines": {
 		"node": ">=8"
@@ -18,18 +17,13 @@
 	"scripts": {
 		"test": "xo && ava"
 	},
-	"files": [
-		"cli.js"
-	],
 	"keywords": [
-		"cli",
-		"cli-app",
-		"unicorn",
-		"fun"
+		"cli"
 	],
 	"dependencies": {
+		"fs-extra": "^9.1.0",
 		"meow": "^5.0.0",
-		"unicorn-fun": "^0.0.0"
+		"plist": "^3.0.1"
 	},
 	"devDependencies": {
 		"ava": "^2.1.0",
