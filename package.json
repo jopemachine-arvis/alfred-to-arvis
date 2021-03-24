@@ -1,9 +1,9 @@
 {
 	"name": "wf-creator-plist-converter",
 	"version": "0.0.1",
-	"description": "",
+	"description": "demo_version",
 	"license": "MIT",
-	"repository": "YOUR-GITHUB-USERNAME/unicorn-fun-cli",
+	"repository": "jopemachine/wf-creator-plist-converter",
 	"author": {
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"

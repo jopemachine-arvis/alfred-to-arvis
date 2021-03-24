@@ -50,6 +50,20 @@ const convert = async (plistPath, flags) => {
       const inputType = inputObject.type;
       const type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
+      let script_filter;
+      let running_subtext;
+
+      switch (inputType) {
+        case 'alfred.workflow.input.keyword': {
+          break;
+        }
+
+        case 'alfred.workflow.input.scriptfilter': {
+          script_filter = inputObject.config.script;
+          running_subtext = inputObject.config.runningsubtext;
+          break;
+        }
+      }
 
       if (graph[uid]) {
         // To do :: fix hack by using loop
@@ -64,6 +78,8 @@ const convert = async (plistPath, flags) => {
             title,
             subtitle,
             action: actionNode,
+            script_filter,
+            running_subtext
           });
         }
       } else {
