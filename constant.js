@@ -12,12 +12,18 @@ const supportedActionFormat = [
   "alfred.workflow.input.scriptfilter",
 ];
 
-const notSupported = (type) => {
-  return `"${type}" not supported`;
+const notSupported = () => {
+  return `Not supported`;
 }
+
+const modifierMap = {
+  1048576: 'cmd',
+  0: 'normal'
+};
 
 module.exports = {
   notSupported,
+  modifierMap,
   supportedInputFormat,
   supportedActionFormat,
 };

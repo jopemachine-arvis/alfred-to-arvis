@@ -2,92 +2,107 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const {
   supportedActionFormat,
-  supportedInputFormat,
   notSupported,
+  modifierMap
 } = require("./constant");
 
 module.exports = class ActionNodeFinder {
+
   constructor(graph, nodeInfo) {
     this.graph = graph;
     this.nodeInfo = nodeInfo;
   }
 
-  getActionNodes (destNodes) {
+  getActionNodes (rootNode) {
+    const destUids = _.map(this.graph[rootNode.uid], item => item.destinationuid);
+    const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+
     const actionNodes = [];
     for (const destNode of destNodes) {
-      actionNodes.push(this.#find(destNode));
+      actionNodes.push(this.#findDests(rootNode, destNode));
     }
     return actionNodes;
   }
 
-  #find(destNode) {
+  #findDests(prevNode, destNode) {
+    const modifiers =
+      modifierMap[
+        _.filter(
+          this.graph[prevNode.uid],
+          (item) => destNode.uid === item.destinationuid
+        )[0].modifiers
+      ];
+
     if (supportedActionFormat.includes(destNode.type)) {
       switch (destNode.type) {
         case "alfred.workflow.action.script":
           return {
             type: "script",
             script: destNode.config.script,
+            modifiers,
           };
 
         case "alfred.workflow.action.openurl":
           return {
             type: "open",
             url: destNode.config.url,
+            modifiers,
           };
 
         case "alfred.workflow.output.clipboard":
           return {
             type: "clipboard",
             text: destNode.config.clipboardtext,
+            modifiers,
           };
 
         case "alfred.workflow.utility.conditional": {
-          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
-          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
-          const newDestNodes = this.getActionNodes(destNodes);
+          const nextDestNodes = this.getActionNodes(destNode);
 
+          // To do:: check 'Assumption' about index order
           return {
             type: "cond",
-            conditions: {
+            if: {
               matchstring: destNode.config.conditions[0].matchstring,
             },
-            action: newDestNodes,
+            modifiers,
+            action: {
+              true: nextDestNodes[0],
+              false: nextDestNodes[1],
+            },
           };
         }
 
         case "alfred.workflow.utility.argument": {
-          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
-          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
-          const newDestNodes = this.getActionNodes(destNodes);
+          const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             type: "args",
-            action: newDestNodes,
+            action: nextDestNodes,
+            modifiers,
           };
         }
 
         case "alfred.workflow.input.scriptfilter": {
-          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
-          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
-          const newDestNodes = this.getActionNodes(destNodes);
+          const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             type: "scriptfilter",
-            action: newDestNodes,
+            action: nextDestNodes,
             script_filter: destNode.config.script,
-            running_subtext: destNode.config.runningsubtext
+            running_subtext: destNode.config.runningsubtext,
+            modifiers,
           };
         }
 
         case "alfred.workflow.input.keyword": {
-          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
-          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
-          const newDestNodes = this.getActionNodes(destNodes);
+          const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             type: "keyword",
-            action: newDestNodes,
-            keyword: destNode.config.keyword
+            action: nextDestNodes,
+            keyword: destNode.config.keyword,
+            modifiers,
           };
         }
         default: 
@@ -99,7 +114,10 @@ module.exports = class ActionNodeFinder {
           `Skipped.. destination type not supported: '${destNode.type}'.`
         )
       );
-      return notSupported(destNode.type);
+      return {
+        type: destNode.type,
+        error: notSupported(),
+      };
     }
   }
 };
