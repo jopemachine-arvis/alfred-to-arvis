@@ -68,20 +68,17 @@ const convert = async (plistPath, flags) => {
       if (graph[uid]) {
         // To do :: fix hack by using loop
         const destUid = graph[uid][0].destinationuid;
-        const destNode = _.filter(nodeInfo, item => item.uid === destUid)[0];
-        const actionNode = actionNodeFinder.find(destNode);
+        const destNodes = _.filter(nodeInfo, item => item.uid === destUid);
 
-        if (actionNode) {
-          result.commands.push({
-            type,
-            command: keyword,
-            title,
-            subtitle,
-            action: actionNode,
-            script_filter,
-            running_subtext
-          });
-        }
+        result.commands.push({
+          type,
+          command: keyword,
+          title,
+          subtitle,
+          action: actionNodeFinder.getActionNodes(destNodes),
+          script_filter,
+          running_subtext,
+        });
       } else {
         console.error(chalk.red(`'${uid}' doesn't have uid. plist seems to be not valid`));
       }

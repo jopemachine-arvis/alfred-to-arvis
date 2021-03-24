@@ -12,7 +12,12 @@ const supportedActionFormat = [
   "alfred.workflow.input.scriptfilter",
 ];
 
+const notSupported = (type) => {
+  return `"${type}" not supported`;
+}
+
 module.exports = {
+  notSupported,
   supportedInputFormat,
   supportedActionFormat,
 };

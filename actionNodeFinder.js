@@ -1,11 +1,23 @@
 const chalk = require('chalk');
 const _ = require('lodash');
-const { supportedActionFormat, supportedInputFormat } = require("./constant");
+const {
+  supportedActionFormat,
+  supportedInputFormat,
+  notSupported,
+} = require("./constant");
 
 module.exports = class ActionNodeFinder {
   constructor(graph, nodeInfo) {
     this.graph = graph;
     this.nodeInfo = nodeInfo;
+  }
+
+  getActionNodes (destNodes) {
+    const actionNodes = [];
+    for (const destNode of destNodes) {
+      actionNodes.push(this.find(destNode));
+    }
+    return actionNodes;
   }
 
   find(destNode) {
@@ -26,67 +38,60 @@ module.exports = class ActionNodeFinder {
         case "alfred.workflow.output.clipboard":
           return {
             type: "clipboard",
-            url: "",
+            text: destNode.config.clipboardtext,
           };
 
         case "alfred.workflow.utility.conditional": {
-          const destUid = this.graph[destNode.uid][0].destinationuid;
-          const newDestNode = _.filter(
-            this.nodeInfo,
-            (item) => item.uid === destUid
-          )[0];
+          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
+          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+          const newDestNodes = this.getActionNodes(destNodes);
 
           return {
             type: "cond",
             conditions: {
               matchstring: destNode.config.conditions[0].matchstring,
             },
-            action: this.find(newDestNode) ?? `Action_not_supported`,
+            action: newDestNodes,
           };
         }
 
         case "alfred.workflow.utility.argument": {
-          const destUid = this.graph[destNode.uid][0].destinationuid;
-          const newDestNode = _.filter(
-            this.nodeInfo,
-            (item) => item.uid === destUid
-          )[0];
+          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
+          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+          const newDestNodes = this.getActionNodes(destNodes);
 
           return {
             type: "args",
-            action: this.find(newDestNode) ?? "Action_not_supported",
+            action: newDestNodes,
           };
         }
 
         case "alfred.workflow.input.scriptfilter": {
-          const destUid = this.graph[destNode.uid][0].destinationuid;
-          const newDestNode = _.filter(
-            this.nodeInfo,
-            (item) => item.uid === destUid
-          )[0];
+          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
+          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+          const newDestNodes = this.getActionNodes(destNodes);
 
           return {
             type: "scriptfilter",
-            action: this.find(newDestNode) ?? "Action_not_supported",
+            action: newDestNodes,
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext
           };
         }
 
         case "alfred.workflow.input.keyword": {
-          const destUid = this.graph[destNode.uid][0].destinationuid;
-          const newDestNode = _.filter(
-            this.nodeInfo,
-            (item) => item.uid === destUid
-          )[0];
+          const destUids = _.map(this.graph[destNode.uid], item => item.destinationuid);
+          const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+          const newDestNodes = this.getActionNodes(destNodes);
 
           return {
             type: "keyword",
-            action: this.find(newDestNode) ?? "Action_not_supported",
+            action: newDestNodes,
             keyword: destNode.config.keyword
           };
         }
-
+        default: 
+          return notSupported();
       }
     } else {
       console.error(
@@ -94,6 +99,7 @@ module.exports = class ActionNodeFinder {
           `Skipped.. destination type not supported: '${destNode.type}'.`
         )
       );
+      return notSupported(destNode.type);
     }
   }
 };
