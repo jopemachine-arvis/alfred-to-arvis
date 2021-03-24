@@ -4,7 +4,20 @@ const fse = require('fs-extra');
 const chalk = require('chalk');
 const _ = require('lodash');
 const ActionNodeFinder = require('./actionNodeFinder');
-const { supportedActionFormat, supportedInputFormat } = require("./constant");
+const { supportedInputFormat } = require("./constant");
+
+const getInputObjects = (nodeInfo) => {
+  let inputObjects = [];
+  for (const format of supportedInputFormat) {
+    inputObjects = [
+      ...inputObjects,
+      ..._.filter(nodeInfo, (item) => {
+        return item.config.keyword && item.type === format
+      }),
+    ];
+  }
+  return inputObjects;
+};
 
 const convert = async (plistPath, flags) => {
   if (fs.existsSync(plistPath)) {
@@ -35,14 +48,7 @@ const convert = async (plistPath, flags) => {
     const graph = targetPlist.connections;
     const nodeInfo = targetPlist.objects;
     const actionNodeFinder = new ActionNodeFinder(graph, nodeInfo);
-
-    let inputObjects = [];
-    for (const format of supportedInputFormat) {
-      inputObjects = [
-        ...inputObjects,
-        ..._.filter(nodeInfo, (item) => item.type === format),
-      ];
-    }
+    const inputObjects = getInputObjects(nodeInfo);
 
     for (const inputObject of inputObjects) {
       const uid = inputObject.uid;
@@ -66,16 +72,16 @@ const convert = async (plistPath, flags) => {
       }
 
       if (graph[uid]) {
-        // To do :: fix hack by using loop
-        const destUid = graph[uid][0].destinationuid;
-        const destNodes = _.filter(nodeInfo, item => item.uid === destUid);
+        const destUids = _.map(graph[uid], item => item.destinationuid);
+        const destNodes = _.filter(nodeInfo, node => destUids.includes(node.uid));
+        const newDestNodes = actionNodeFinder.getActionNodes(destNodes);
 
         result.commands.push({
           type,
           command: keyword,
           title,
           subtitle,
-          action: actionNodeFinder.getActionNodes(destNodes),
+          action: newDestNodes,
           script_filter,
           running_subtext,
         });

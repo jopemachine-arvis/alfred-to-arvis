@@ -15,12 +15,12 @@ module.exports = class ActionNodeFinder {
   getActionNodes (destNodes) {
     const actionNodes = [];
     for (const destNode of destNodes) {
-      actionNodes.push(this.find(destNode));
+      actionNodes.push(this.#find(destNode));
     }
     return actionNodes;
   }
 
-  find(destNode) {
+  #find(destNode) {
     if (supportedActionFormat.includes(destNode.type)) {
       switch (destNode.type) {
         case "alfred.workflow.action.script":
