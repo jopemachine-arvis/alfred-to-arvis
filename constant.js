@@ -17,8 +17,12 @@ const notSupported = () => {
 }
 
 const modifierMap = {
+  0: 'normal',
+  131072: 'shift',
+  262144: 'ctrl',
+  524288: 'option',
   1048576: 'cmd',
-  0: 'normal'
+  8388608: 'fn',
 };
 
 module.exports = {

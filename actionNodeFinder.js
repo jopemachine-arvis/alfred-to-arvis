@@ -37,23 +37,23 @@ module.exports = class ActionNodeFinder {
       switch (destNode.type) {
         case "alfred.workflow.action.script":
           return {
+            modifiers,
             type: "script",
             script: destNode.config.script,
-            modifiers,
           };
 
         case "alfred.workflow.action.openurl":
           return {
+            modifiers,
             type: "open",
             url: destNode.config.url,
-            modifiers,
           };
 
         case "alfred.workflow.output.clipboard":
           return {
+            modifiers,
             type: "clipboard",
             text: destNode.config.clipboardtext,
-            modifiers,
           };
 
         case "alfred.workflow.utility.conditional": {
@@ -61,11 +61,11 @@ module.exports = class ActionNodeFinder {
 
           // To do:: check 'Assumption' about index order
           return {
+            modifiers,
             type: "cond",
             if: {
               matchstring: destNode.config.conditions[0].matchstring,
             },
-            modifiers,
             action: {
               true: nextDestNodes[0],
               false: nextDestNodes[1],
@@ -75,11 +75,11 @@ module.exports = class ActionNodeFinder {
 
         case "alfred.workflow.utility.argument": {
           const nextDestNodes = this.getActionNodes(destNode);
-
           return {
-            type: "args",
-            action: nextDestNodes,
             modifiers,
+            type: "args",
+            arg: destNode.config.argument,
+            action: nextDestNodes,
           };
         }
 
@@ -87,11 +87,11 @@ module.exports = class ActionNodeFinder {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
+            modifiers,
             type: "scriptfilter",
-            action: nextDestNodes,
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext,
-            modifiers,
+            action: nextDestNodes,
           };
         }
 
@@ -99,10 +99,10 @@ module.exports = class ActionNodeFinder {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
-            type: "keyword",
-            action: nextDestNodes,
-            keyword: destNode.config.keyword,
             modifiers,
+            type: "keyword",
+            keyword: destNode.config.keyword,
+            action: nextDestNodes,
           };
         }
         default: 
