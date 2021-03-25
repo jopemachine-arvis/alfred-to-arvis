@@ -2,3 +2,5 @@ node_modules
 yarn.lock
 .DS_Store
 alfred-chrome-workflow.json
+alfred-npms.json
+com.sindresorhus.npms.json

@@ -52,12 +52,13 @@ const convert = async (plistPath, flags) => {
 
     for (const inputObject of inputObjects) {
       const uid = inputObject.uid;
-      const { text: title, subtext: subtitle } = inputObject.config;
+      const { text, title, subtext: subtitle } = inputObject.config;
       const inputType = inputObject.type;
       const type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
       let script_filter;
       let running_subtext;
+      let withspace;
 
       switch (inputType) {
         case 'alfred.workflow.input.keyword': {
@@ -67,6 +68,7 @@ const convert = async (plistPath, flags) => {
         case 'alfred.workflow.input.scriptfilter': {
           script_filter = inputObject.config.script;
           running_subtext = inputObject.config.runningsubtext;
+          withspace = inputObject.config.withspace;
           break;
         }
       }
@@ -77,10 +79,12 @@ const convert = async (plistPath, flags) => {
         result.commands.push({
           type,
           command: keyword,
+          text,
           title,
           subtitle,
           script_filter,
           running_subtext,
+          withspace,
           action: actionNodes,
         });
       } else {
@@ -88,7 +92,7 @@ const convert = async (plistPath, flags) => {
       }
     }
 
-    await fse.writeJSON(`${name}.json`, result, {
+    await fse.writeJSON(`${bundleId}.json`, result, {
       encoding: 'utf-8',
       spaces: 2,
     });

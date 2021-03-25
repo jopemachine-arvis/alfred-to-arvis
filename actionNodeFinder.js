@@ -91,6 +91,7 @@ module.exports = class ActionNodeFinder {
             type: "scriptfilter",
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext,
+            withspace: destNode.config.withspace,
             action: nextDestNodes,
           };
         }
@@ -102,6 +103,7 @@ module.exports = class ActionNodeFinder {
             modifiers,
             type: "keyword",
             keyword: destNode.config.keyword,
+            withspace: destNode.config.withspace,
             action: nextDestNodes,
           };
         }
