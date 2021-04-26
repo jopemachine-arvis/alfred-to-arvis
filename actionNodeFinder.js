@@ -13,18 +13,35 @@ module.exports = class ActionNodeFinder {
     this.nodeInfo = nodeInfo;
   }
 
-  getActionNodes (rootNode) {
-    const destUids = _.map(this.graph[rootNode.uid], item => item.destinationuid);
-    const destNodes = _.filter(this.nodeInfo, node => destUids.includes(node.uid));
+  getActionNodes (rootNode, conditions) {
+    let targetNodeInfo = this.graph[rootNode.uid];
+
+    // Filter by matchmode
+    // sourceoutputuid가 없는 노드들을 else 노드로, 있는 노드들을 then 노드로 간주함
+    if (conditions === true || conditions === false) {
+      targetNodeInfo = _.filter(this.graph[rootNode.uid], (node) => {
+        if (conditions === true) return node.sourceoutputuid;
+        return node.sourceoutputuid ? false : true;
+      });
+    }
+
+    const destUids = _.map(
+      targetNodeInfo,
+      (item) => item.destinationuid
+    );
+
+    let destNodes = _.filter(this.nodeInfo, (node) => {
+      return destUids.includes(node.uid);
+    });
 
     const actionNodes = [];
     for (const destNode of destNodes) {
-      actionNodes.push(this.#findDests(rootNode, destNode));
+      actionNodes.push(this.findDests(rootNode, destNode));
     }
     return actionNodes;
   }
 
-  #findDests(prevNode, destNode) {
+  findDests(prevNode, destNode) {
     const modifiers =
       modifierMap[
         _.filter(
@@ -57,18 +74,36 @@ module.exports = class ActionNodeFinder {
           };
 
         case "alfred.workflow.utility.conditional": {
-          const nextDestNodes = this.getActionNodes(destNode);
+          const thenNextDestNodes = this.getActionNodes(destNode, true);
+          const elseNextDestNodes = this.getActionNodes(destNode, false);
 
-          // To do:: check 'Assumption' about index order
+          let conditionStmt = '';
+          destNode.config.conditions.map((cond, idx) => {
+            const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
+
+            // 0: true when match
+            // 1: true when not match
+            // 4: regex match
+            if (cond.matchmode === 0) {
+              conditionStmt += `{${arg}} === ${cond.matchstring}`
+            } else if (cond.matchmode === 1) {
+              conditionStmt += `{${arg}} !== ${cond.matchstring}`
+            } else if (cond.matchmode === 4) {
+              conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`
+            }
+
+            if (idx !== destNode.config.conditions.length - 1) conditionStmt += ' && ';
+          });
+
           return {
             modifiers,
             type: "cond",
             if: {
-              matchstring: destNode.config.conditions[0].matchstring,
-            },
-            action: {
-              true: nextDestNodes[0],
-              false: nextDestNodes[1],
+              cond: conditionStmt,
+              action: {
+                then: thenNextDestNodes,
+                else: elseNextDestNodes,
+              }
             },
           };
         }
@@ -107,7 +142,7 @@ module.exports = class ActionNodeFinder {
             action: nextDestNodes,
           };
         }
-        default: 
+        default:
           return notSupported();
       }
     } else {
