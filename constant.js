@@ -4,6 +4,8 @@ const supportedInputFormat = [
 ];
 
 const supportedActionFormat = [
+  "alfred.workflow.output.notification",
+  "alfred.workflow.action.openfile",
   "alfred.workflow.action.script",
   "alfred.workflow.action.openurl",
   "alfred.workflow.output.clipboard",

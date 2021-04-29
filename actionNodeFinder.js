@@ -52,41 +52,61 @@ module.exports = class ActionNodeFinder {
 
     if (supportedActionFormat.includes(destNode.type)) {
       switch (destNode.type) {
-        case "alfred.workflow.action.script":
+        case "alfred.workflow.action.script": {
+          const nextDestNodes = this.getActionNodes(destNode);
+
           return {
             modifiers,
             type: "script",
             script: destNode.config.script,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
+        }
 
-        case "alfred.workflow.output.notification":
+        case "alfred.workflow.output.notification": {
+          const nextDestNodes = this.getActionNodes(destNode);
+
           return {
             modifiers,
             type: "notification",
             title: destNode.config.title,
-            text: destNode.config.text
+            text: destNode.config.text,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
+        }
 
-        case "alfred.workflow.action.openfile":
+        case "alfred.workflow.action.openfile": {
+          const nextDestNodes = this.getActionNodes(destNode);
+
           return {
             modifiers,
             type: "open",
-            target: destNode.config.sourcefile
+            target: destNode.config.sourcefile,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
+        }
 
-        case "alfred.workflow.action.openurl":
+        case "alfred.workflow.action.openurl": {
+          const nextDestNodes = this.getActionNodes(destNode);
+
           return {
             modifiers,
             type: "open",
             target: destNode.config.url,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
+        }
 
-        case "alfred.workflow.output.clipboard":
+        case "alfred.workflow.output.clipboard": {
+          const nextDestNodes = this.getActionNodes(destNode);
+
           return {
             modifiers,
             type: "clipboard",
             text: destNode.config.clipboardtext,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
+        }
 
         case "alfred.workflow.utility.conditional": {
           const thenNextDestNodes = this.getActionNodes(destNode, true);
