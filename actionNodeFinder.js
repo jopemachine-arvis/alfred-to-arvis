@@ -59,11 +59,26 @@ module.exports = class ActionNodeFinder {
             script: destNode.config.script,
           };
 
+        case "alfred.workflow.output.notification":
+          return {
+            modifiers,
+            type: "notification",
+            title: destNode.config.title,
+            text: destNode.config.text
+          };
+
+        case "alfred.workflow.action.openfile":
+          return {
+            modifiers,
+            type: "open",
+            target: destNode.config.sourcefile
+          };
+
         case "alfred.workflow.action.openurl":
           return {
             modifiers,
             type: "open",
-            url: destNode.config.url,
+            target: destNode.config.url,
           };
 
         case "alfred.workflow.output.clipboard":
