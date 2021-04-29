@@ -85,9 +85,9 @@ module.exports = class ActionNodeFinder {
             // 1: true when not match
             // 4: regex match
             if (cond.matchmode === 0) {
-              conditionStmt += `{${arg}} === ${cond.matchstring}`
+              conditionStmt += `{${arg}} == "${cond.matchstring}"`
             } else if (cond.matchmode === 1) {
-              conditionStmt += `{${arg}} !== ${cond.matchstring}`
+              conditionStmt += `{${arg}} != "${cond.matchstring}"`
             } else if (cond.matchmode === 4) {
               conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`
             }
