@@ -16,8 +16,8 @@ module.exports = class ActionNodeFinder {
   getActionNodes (rootNode, conditions) {
     let targetNodeInfo = this.graph[rootNode.uid];
 
-    // Filter by matchmode
-    // sourceoutputuid가 없는 노드들을 else 노드로, 있는 노드들을 then 노드로 간주함
+    // Nodes without sourceoutput are considered 'else' nodes,
+    // And nodes with sourceoutput are considered 'then' nodes
     if (conditions === true || conditions === false) {
       targetNodeInfo = _.filter(this.graph[rootNode.uid], (node) => {
         if (conditions === true) return node.sourceoutputuid;
@@ -77,28 +77,43 @@ module.exports = class ActionNodeFinder {
 
         case "alfred.workflow.action.openfile": {
           const nextDestNodes = this.getActionNodes(destNode);
+          let target = destNode.config.sourcefile;
+          // If target is empty, replace it with '{query}'
+          if (!target || target === '') {
+            target = '{query}';
+          }
 
           return {
             modifiers,
             type: "open",
-            target: destNode.config.sourcefile,
+            target,
             action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
         }
 
         case "alfred.workflow.action.openurl": {
           const nextDestNodes = this.getActionNodes(destNode);
+          let target = destNode.config.url;
+          // If target is empty, replace it with '{query}'
+          if (!target || target === '') {
+            target = '{query}';
+          }
 
           return {
             modifiers,
             type: "open",
-            target: destNode.config.url,
+            target,
             action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
           };
         }
 
         case "alfred.workflow.output.clipboard": {
           const nextDestNodes = this.getActionNodes(destNode);
+          let target = destNode.config.clipboardtext;
+          // If target is empty, replace it with '{query}'
+          if (!target || target === "") {
+            target = "{query}";
+          }
 
           return {
             modifiers,
@@ -116,13 +131,20 @@ module.exports = class ActionNodeFinder {
           destNode.config.conditions.map((cond, idx) => {
             const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
 
+            // * About match mode
             // 0: true when match
             // 1: true when not match
+            // 2: greater than
+            // 3: lesser than
             // 4: regex match
             if (cond.matchmode === 0) {
               conditionStmt += `{${arg}} == "${cond.matchstring}"`
             } else if (cond.matchmode === 1) {
               conditionStmt += `{${arg}} != "${cond.matchstring}"`
+            } else if (cond.matchmode === 2) {
+              conditionStmt += `{${arg}} > "${cond.matchstring}"`
+            } else if (cond.matchmode === 3) {
+              conditionStmt += `{${arg}} < "${cond.matchstring}"`
             } else if (cond.matchmode === 4) {
               conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`
             }
