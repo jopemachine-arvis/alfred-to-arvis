@@ -80,23 +80,23 @@ const convert = async (plistPath, flags) => {
       const type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
 
+      let appendNode = graph[uid];
       switch (inputType) {
         case 'alfred.workflow.trigger.hotkey': {
+          appendNode = hotkey;
           break;
         }
         case 'alfred.workflow.input.keyword': {
+          appendNode = keyword;
           break;
         }
-
         case 'alfred.workflow.input.scriptfilter': {
-          script_filter = inputObject.config.script;
-          running_subtext = inputObject.config.runningsubtext;
-          withspace = inputObject.config.withspace;
+          appendNode = script_filter;
           break;
         }
       }
 
-      if (graph[uid]) {
+      if (appendNode) {
         const actionNodes = actionNodeFinder.getActionNodes(inputObject);
 
         result.commands.push({
@@ -113,7 +113,7 @@ const convert = async (plistPath, flags) => {
         });
       } else {
         console.error(
-          chalk.red(`'${uid}' doesn't have uid. plist seems to be not valid`)
+          chalk.magentaBright(`Node '${uid}' (Type: '${type}') doesn't have expected word.`)
         );
       }
     }
