@@ -1,36 +1,29 @@
 const chalk = require('chalk');
 const _ = require('lodash');
-const {
-  supportedActionFormat,
-  notSupported,
-  modifierMap
-} = require("./constant");
+const { supportedActionFormat, notSupported } = require('./constant');
+const { getModifier } = require('./util');
 
 module.exports = class ActionNodeFinder {
-
   constructor(graph, nodeInfo) {
     this.graph = graph;
     this.nodeInfo = nodeInfo;
   }
 
-  getActionNodes (rootNode, conditions) {
+  getActionNodes(rootNode, conditions) {
     let targetNodeInfo = this.graph[rootNode.uid];
 
     // Nodes without sourceoutput are considered 'else' nodes,
     // And nodes with sourceoutput are considered 'then' nodes
     if (conditions === true || conditions === false) {
-      targetNodeInfo = _.filter(this.graph[rootNode.uid], (node) => {
+      targetNodeInfo = _.filter(this.graph[rootNode.uid], node => {
         if (conditions === true) return node.sourceoutputuid;
         return node.sourceoutputuid ? false : true;
       });
     }
 
-    const destUids = _.map(
-      targetNodeInfo,
-      (item) => item.destinationuid
-    );
+    const destUids = _.map(targetNodeInfo, item => item.destinationuid);
 
-    let destNodes = _.filter(this.nodeInfo, (node) => {
+    let destNodes = _.filter(this.nodeInfo, node => {
       return destUids.includes(node.uid);
     });
 
@@ -42,40 +35,34 @@ module.exports = class ActionNodeFinder {
   }
 
   findDests(prevNode, destNode) {
-    const modifiers =
-      modifierMap[
-        _.filter(
-          this.graph[prevNode.uid],
-          (item) => destNode.uid === item.destinationuid
-        )[0].modifiers
-      ];
+    const modifiers = getModifier(this.graph, prevNode, destNode);
 
     if (supportedActionFormat.includes(destNode.type)) {
       switch (destNode.type) {
-        case "alfred.workflow.action.script": {
+        case 'alfred.workflow.action.script': {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             modifiers,
-            type: "script",
+            type: 'script',
             script: destNode.config.script,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
-        case "alfred.workflow.output.notification": {
+        case 'alfred.workflow.output.notification': {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             modifiers,
-            type: "notification",
+            type: 'notification',
             title: destNode.config.title,
             text: destNode.config.text,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
-        case "alfred.workflow.action.openfile": {
+        case 'alfred.workflow.action.openfile': {
           const nextDestNodes = this.getActionNodes(destNode);
           let target = destNode.config.sourcefile;
           // If target is empty, replace it with '{query}'
@@ -85,13 +72,13 @@ module.exports = class ActionNodeFinder {
 
           return {
             modifiers,
-            type: "open",
+            type: 'open',
             target,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
-        case "alfred.workflow.action.openurl": {
+        case 'alfred.workflow.action.openurl': {
           const nextDestNodes = this.getActionNodes(destNode);
           let target = destNode.config.url;
           // If target is empty, replace it with '{query}'
@@ -101,29 +88,29 @@ module.exports = class ActionNodeFinder {
 
           return {
             modifiers,
-            type: "open",
+            type: 'open',
             target,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
-        case "alfred.workflow.output.clipboard": {
+        case 'alfred.workflow.output.clipboard': {
           const nextDestNodes = this.getActionNodes(destNode);
           let target = destNode.config.clipboardtext;
           // If target is empty, replace it with '{query}'
-          if (!target || target === "") {
-            target = "{query}";
+          if (!target || target === '') {
+            target = '{query}';
           }
 
           return {
             modifiers,
-            type: "clipboard",
+            type: 'clipboard',
             text: destNode.config.clipboardtext,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined,
+            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
-        case "alfred.workflow.utility.conditional": {
+        case 'alfred.workflow.utility.conditional': {
           const thenNextDestNodes = this.getActionNodes(destNode, true);
           const elseNextDestNodes = this.getActionNodes(destNode, false);
 
@@ -138,65 +125,66 @@ module.exports = class ActionNodeFinder {
             // 3: lesser than
             // 4: regex match
             if (cond.matchmode === 0) {
-              conditionStmt += `{${arg}} == "${cond.matchstring}"`
+              conditionStmt += `{${arg}} == "${cond.matchstring}"`;
             } else if (cond.matchmode === 1) {
-              conditionStmt += `{${arg}} != "${cond.matchstring}"`
+              conditionStmt += `{${arg}} != "${cond.matchstring}"`;
             } else if (cond.matchmode === 2) {
-              conditionStmt += `{${arg}} > "${cond.matchstring}"`
+              conditionStmt += `{${arg}} > "${cond.matchstring}"`;
             } else if (cond.matchmode === 3) {
-              conditionStmt += `{${arg}} < "${cond.matchstring}"`
+              conditionStmt += `{${arg}} < "${cond.matchstring}"`;
             } else if (cond.matchmode === 4) {
-              conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`
+              conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`;
             }
 
-            if (idx !== destNode.config.conditions.length - 1) conditionStmt += ' && ';
+            if (idx !== destNode.config.conditions.length - 1)
+              conditionStmt += ' && ';
           });
 
           return {
             modifiers,
-            type: "cond",
+            type: 'cond',
             if: {
               cond: conditionStmt,
               action: {
                 then: thenNextDestNodes,
-                else: elseNextDestNodes,
+                else: elseNextDestNodes
               }
-            },
+            }
           };
         }
 
-        case "alfred.workflow.utility.argument": {
+        case 'alfred.workflow.utility.argument': {
           const nextDestNodes = this.getActionNodes(destNode);
           return {
             modifiers,
-            type: "args",
+            type: 'args',
             arg: destNode.config.argument,
-            action: nextDestNodes,
+            action: nextDestNodes
           };
         }
 
-        case "alfred.workflow.input.scriptfilter": {
+        case 'alfred.workflow.input.scriptfilter': {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             modifiers,
-            type: "scriptfilter",
+            type: 'scriptfilter',
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
-            action: nextDestNodes,
+            action: nextDestNodes
           };
         }
 
-        case "alfred.workflow.input.keyword": {
+        case 'alfred.workflow.input.keyword': {
           const nextDestNodes = this.getActionNodes(destNode);
 
           return {
             modifiers,
-            type: "keyword",
+            type: 'keyword',
             keyword: destNode.config.keyword,
             withspace: destNode.config.withspace,
-            action: nextDestNodes,
+            action: nextDestNodes
           };
         }
         default:
@@ -210,7 +198,7 @@ module.exports = class ActionNodeFinder {
       );
       return {
         type: destNode.type,
-        error: notSupported(),
+        error: notSupported()
       };
     }
   }

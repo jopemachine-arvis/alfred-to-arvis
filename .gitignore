@@ -4,3 +4,5 @@ yarn.lock
 alfred-chrome-workflow.json
 alfred-npms.json
 com.sindresorhus.npms.json
+*.json
+*.plist

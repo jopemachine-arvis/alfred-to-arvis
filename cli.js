@@ -2,17 +2,19 @@
 const meow = require('meow');
 const converter = require('./converter');
 
-const cli = meow(`
-	Usage
-	  $ wf-creator-plist-converter [input]
+const cli = meow(
+  `
+	Change the info.plist file format of Alfred workflow to the config file of the wf-creator and write it.
 
-	Options
+	Usage
+	  $ wf-creator-plist-converter [info.plist file]
 
 	Examples
-	  $ 
-`, {
-	flags: {
-	}
-});
+	  $ wf-creator-plist-converter info.plist
+`,
+  {
+    flags: {}
+  }
+);
 
 converter(cli.input[0], cli.flags);
