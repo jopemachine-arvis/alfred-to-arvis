@@ -1,15 +1,15 @@
 {
-	"name": "wf-creator-plist-converter",
+	"name": "arvis-plist-converter",
 	"version": "0.0.1",
-	"description": "Change the info.plist file format of Alfred workflow to the config file of the wf-creator and write it.",
+	"description": "Change the info.plist file format of Alfred workflow to the config file of the Arvis and write it.",
 	"license": "MIT",
-	"repository": "jopemachine/wf-creator-plist-converter",
+	"repository": "jopemachine/arvis-plist-converter",
 	"author": {
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"
 	},
 	"bin": {
-		"wf-creator-plist-converter": "cli.js"
+		"arvis-plist-converter": "cli.js"
 	},
 	"engines": {
 		"node": ">=8"
@@ -18,7 +18,7 @@
 		"test": "xo && ava"
 	},
 	"keywords": [
-		"wf-creator",
+		"arvis",
 		"cli"
 	],
 	"dependencies": {

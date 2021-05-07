@@ -5,10 +5,10 @@ const converter = require('./converter');
 const cli = meow(
   `
 	Usage
-	  $ wf-creator-plist-converter [info.plist file]
+	  $ arvis-plist-converter [info.plist file]
 
 	Examples
-	  $ wf-creator-plist-converter info.plist
+	  $ arvis-plist-converter info.plist
 `,
   {
     flags: {}

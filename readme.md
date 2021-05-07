@@ -1,6 +1,6 @@
-# wf-creator-plist-converter
+# arvis-plist-converter
 
-> Convert Alfred workflow's plist to json to use it in wf-creator
+> Convert Alfred workflow's plist to json to use it in arvis
 
 ## Getting started
 
@@ -8,7 +8,7 @@
 ## Install
 
 ```
-$ npm install --global wf-creator-plist-converter
+$ npm i -g arvis-plist-converter
 ```
 
 ## Usage
