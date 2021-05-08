@@ -15,4 +15,9 @@ const cli = meow(
   }
 );
 
-converter(cli.input[0], cli.flags);
+if (cli.input.length === 1) {
+  converter(cli.input[0]);
+} else if (cli.input.length > 1) {
+  converter(cli.input[0], cli.input[1]);
+}
+

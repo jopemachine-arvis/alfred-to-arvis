@@ -5,13 +5,14 @@
 ## Getting started
 
 
-## Install
+### Install
 
 ```
 $ npm i -g arvis-plist-converter
 ```
 
-## Usage
+### Usage
 
 ```
+$ arvis-plist-converter info.plist
 ```

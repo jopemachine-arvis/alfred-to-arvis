@@ -19,7 +19,7 @@ const getInputObjects = nodeInfo => {
   return inputObjects;
 };
 
-const convert = async (plistPath, flags) => {
+const convert = async (plistPath, outputPath) => {
   if (fs.existsSync(plistPath)) {
     const targetPlist = plist.parse(fs.readFileSync(plistPath, 'utf8'));
     const {
@@ -34,6 +34,8 @@ const convert = async (plistPath, flags) => {
     } = targetPlist;
 
     const result = {
+      // To do:: Replace it with url path
+      $schema: 'some_schema_file_path',
       bundleId,
       category,
       createdby,
@@ -118,12 +120,14 @@ const convert = async (plistPath, flags) => {
       }
     }
 
-    await fse.writeJSON(`${bundleId}.json`, result, {
+    const out = outputPath ? outputPath : `${bundleId}.json`;
+
+    await fse.writeJSON(out, result, {
       encoding: 'utf-8',
       spaces: 2
     });
 
-    console.log(chalk.greenBright(`Works done.. result: '${bundleId}.json'`));
+    console.log(chalk.greenBright(`'${bundleId}' works done..`));
   } else {
     console.error(chalk.red('plist file not found!'));
     return;

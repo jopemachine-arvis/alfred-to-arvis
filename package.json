@@ -1,18 +1,19 @@
 {
 	"name": "arvis-plist-converter",
 	"version": "0.0.1",
-	"description": "Change the info.plist file format of Alfred workflow to the config file of the Arvis and write it.",
+	"description": "Convert the info.plist file format of Alfred-workflows to the config file of the Arvis",
 	"license": "MIT",
 	"repository": "jopemachine/arvis-plist-converter",
 	"author": {
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"
 	},
+	"main": "index.js",
 	"bin": {
 		"arvis-plist-converter": "cli.js"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=12"
 	},
 	"scripts": {
 		"test": "xo && ava"
