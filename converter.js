@@ -129,8 +129,7 @@ const convert = async (plistPath, outputPath) => {
 
     console.log(chalk.greenBright(`'${bundleId}' works done..`));
   } else {
-    console.error(chalk.red('plist file not found!'));
-    return;
+    throw new Error(`plist file not found! given plist path: ${plistPath}`);
   }
 };
 
