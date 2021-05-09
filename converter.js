@@ -78,7 +78,11 @@ const convert = async (plistPath, outputPath) => {
       if (hotmod) {
         const modifiers = modifierMap[hotmod];
         if (hotstring) {
-          hotkey = `${modifiers} + ${hotstring}`;
+          if (hotstring === 'double tap') {
+            hotkey = `Double ${modifiers}`;
+          } else {
+            hotkey = `${modifiers} + ${hotstring}`;
+          }
         }
       }
 
@@ -136,7 +140,7 @@ const convert = async (plistPath, outputPath) => {
       spaces: 2
     });
 
-    console.log(chalk.greenBright(`'${bundleId}' works done..`));
+    console.log(chalk.greenBright(`'${bundleId}' info.plist converting is done..`));
   } else {
     throw new Error(`plist file not found! given plist path: ${plistPath}`);
   }
