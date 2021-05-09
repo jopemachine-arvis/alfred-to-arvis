@@ -33,6 +33,10 @@ const convert = async (plistPath, outputPath) => {
       webaddress
     } = targetPlist;
 
+    if (!bundleId) {
+      throw new Error('bundleId is not set on info.plist, parsed plist: ', targetPlist);
+    }
+
     const result = {
       // To do:: Replace it with url path
       $schema: 'some_schema_file_path',
@@ -65,7 +69,7 @@ const convert = async (plistPath, outputPath) => {
         hotstring,
 
         // scriptfilter
-        script_filter,
+        script,
         running_subtext,
         withspace
       } = inputObject.config;
@@ -77,6 +81,9 @@ const convert = async (plistPath, outputPath) => {
           hotkey = `${modifiers} + ${hotstring}`;
         }
       }
+
+      // if hotkey is not set
+      if (hotkey === 0) hotkey = undefined;
 
       const inputType = inputObject.type;
       const type = inputType.split('.')[inputType.split('.').length - 1];
@@ -93,12 +100,12 @@ const convert = async (plistPath, outputPath) => {
           break;
         }
         case 'alfred.workflow.input.scriptfilter': {
-          appendNode = script_filter;
+          appendNode = script;
           break;
         }
       }
 
-      if (appendNode) {
+      if (appendNode !== undefined) {
         const actionNodes = actionNodeFinder.getActionNodes(inputObject);
 
         result.commands.push({
@@ -107,15 +114,17 @@ const convert = async (plistPath, outputPath) => {
           text,
           title,
           subtitle,
-          script_filter,
+          script_filter: script,
           running_subtext,
           withspace,
           hotkey,
           action: actionNodes
         });
       } else {
-        console.error(
-          chalk.magentaBright(`Node '${uid}' (Type: '${type}') doesn't have expected word.`)
+        console.log(
+          chalk.magentaBright(
+            `Node '${uid}' (Type: '${type}') doesn't have expected word.`
+          )
         );
       }
     }
