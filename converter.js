@@ -59,6 +59,7 @@ const convert = async (plistPath, outputPath) => {
       readme,
       version,
       webaddress,
+      enabled: true,
       commands: []
     };
 

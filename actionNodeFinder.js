@@ -168,11 +168,13 @@ module.exports = class ActionNodeFinder {
 
           return {
             modifiers,
+            command: destNode.config.keyword,
+            title: destNode.config.title,
             type: 'scriptfilter',
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
-            action: nextDestNodes
+            action: nextDestNodes,
           };
         }
 
