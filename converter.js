@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const ActionNodeFinder = require('./actionNodeFinder');
 const { modifierMap, supportedInputFormat } = require('./constant');
+const path = require('path');
 
 const getInputObjects = nodeInfo => {
   let inputObjects = [];
@@ -20,6 +21,15 @@ const getInputObjects = nodeInfo => {
 };
 
 const convert = async (plistPath, outputPath) => {
+  const pathArr = plistPath.split(path.sep);
+  pathArr.pop();
+  const plistDirPath = pathArr.join(path.sep);
+
+  let defaultIcon;
+  if (fse.existsSync(`${plistDirPath}${path.sep}icon.png`)) {
+    defaultIcon = 'icon.png';
+  }
+
   if (fs.existsSync(plistPath)) {
     const targetPlist = plist.parse(fs.readFileSync(plistPath, 'utf8'));
     const {
@@ -40,6 +50,7 @@ const convert = async (plistPath, outputPath) => {
     const result = {
       // To do:: Replace it with url path
       $schema: 'some_schema_file_path',
+      defaultIcon,
       bundleId,
       category,
       createdby,
@@ -70,8 +81,8 @@ const convert = async (plistPath, outputPath) => {
 
         // scriptfilter
         script,
-        running_subtext,
-        withspace
+        withspace,
+        runningsubtext: running_subtext,
       } = inputObject.config;
 
       let hotkey = hotmod;
