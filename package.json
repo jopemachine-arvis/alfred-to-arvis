@@ -16,7 +16,8 @@
 		"node": ">=12"
 	},
 	"scripts": {
-		"test": "xo && ava"
+		"test": "xo && ava",
+		"local-install": "npm i -g ./"
 	},
 	"keywords": [
 		"arvis",

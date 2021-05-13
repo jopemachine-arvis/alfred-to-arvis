@@ -20,6 +20,36 @@ const getInputObjects = nodeInfo => {
   return inputObjects;
 };
 
+const convertHotkey = (hotmod, hotstring) => {
+  let hotkey = hotmod;
+  if (hotmod) {
+    const modifiers = modifierMap[hotmod];
+    if (hotstring) {
+      if (hotstring === 'double tap') {
+        hotkey = `Double ${modifiers}`;
+      } else {
+        hotkey = `${modifiers} + ${hotstring}`;
+      }
+    }
+  }
+
+  // if hotkey is not set
+  if (hotkey === 0) hotkey = undefined;
+  return hotkey;
+};
+
+const convertArgumentType = (argumenttype) => {
+  if (argumenttype === 0) {
+    return 'required';
+  }
+  if (argumenttype === 1) {
+    return 'optional';
+  }
+  if (argumenttype === 2) {
+    return 'no';
+  }
+}
+
 const convert = async (plistPath, outputPath) => {
   const pathArr = plistPath.split(path.sep);
   pathArr.pop();
@@ -83,24 +113,12 @@ const convert = async (plistPath, outputPath) => {
         // scriptfilter
         script,
         withspace,
+        argumenttype,
         runningsubtext: running_subtext,
       } = inputObject.config;
 
-      let hotkey = hotmod;
-      if (hotmod) {
-        const modifiers = modifierMap[hotmod];
-        if (hotstring) {
-          if (hotstring === 'double tap') {
-            hotkey = `Double ${modifiers}`;
-          } else {
-            hotkey = `${modifiers} + ${hotstring}`;
-          }
-        }
-      }
-
-      // if hotkey is not set
-      if (hotkey === 0) hotkey = undefined;
-
+      const hotkey = convertHotkey(hotmod, hotstring);
+      const arg_type = convertArgumentType(argumenttype);
       const inputType = inputObject.type;
       const type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
@@ -134,6 +152,7 @@ const convert = async (plistPath, outputPath) => {
           running_subtext,
           withspace,
           hotkey,
+          arg_type,
           action: actionNodes
         });
       } else {
