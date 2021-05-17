@@ -134,12 +134,12 @@ const convert = async (plistPath, outputPath) => {
           break;
         }
         case 'alfred.workflow.input.scriptfilter': {
-          appendNode = script;
+          appendNode = script && keyword && keyword !== '';
           break;
         }
       }
 
-      if (appendNode !== undefined) {
+      if (appendNode) {
         const actionNodes = actionNodeFinder.getActionNodes(inputObject);
 
         result.commands.push({
