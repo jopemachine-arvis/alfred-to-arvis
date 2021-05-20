@@ -78,8 +78,7 @@ const convert = async (plistPath, outputPath) => {
     }
 
     const result = {
-      // To do:: Replace it with url path
-      $schema: 'some_schema_file_path',
+      $schema: 'https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json',
       defaultIcon,
       bundleId,
       category,
@@ -145,8 +144,7 @@ const convert = async (plistPath, outputPath) => {
         result.commands.push({
           type,
           command: keyword,
-          text,
-          title,
+          title: title || text,
           subtitle,
           script_filter: script,
           running_subtext,

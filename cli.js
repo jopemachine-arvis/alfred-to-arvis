@@ -5,7 +5,7 @@ const converter = require('./converter');
 const cli = meow(
   `
 	Usage
-	  $ arvis-plist-converter [info.plist file]
+	  $ arvis-plist-converter [alfred workflow's "info.plist" file]
 
 	Examples
 	  $ arvis-plist-converter info.plist
