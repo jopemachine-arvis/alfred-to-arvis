@@ -1,6 +1,6 @@
 # arvis-plist-converter
 
-> Convert Alfred workflow's plist to json to use it in arvis
+> Convert Alfred workflow's `info.plist` to `arvis-workflow.json` of [Arvis](https://github.com/jopemachine/arvis)
 
 ## Getting started
 
@@ -14,5 +14,5 @@ $ npm i -g arvis-plist-converter
 ### Usage
 
 ```
-$ arvis-plist-converter info.plist
+$ arvis-plist-converter [alfred workflow's "info.plist" file]
 ```
