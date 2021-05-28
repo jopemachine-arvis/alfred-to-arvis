@@ -30,7 +30,7 @@ export default class ActionNodeFinder {
       return destUids.includes(node.uid);
     });
 
-    const actionNodes = [];
+    const actionNodes: any[] = [];
     for (const destNode of destNodes) {
       actionNodes.push(this.findDests(rootNode, destNode));
     }
