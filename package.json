@@ -8,6 +8,11 @@
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"
 	},
+	"files": [
+		"dist/*.js",
+		"readme.md",
+		"index.d.ts"
+	],
 	"main": "dist/index.js",
 	"bin": {
 		"arvis-plist-converter": "dist/cli.js"
