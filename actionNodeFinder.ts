@@ -1,15 +1,18 @@
-const chalk = require('chalk');
-const _ = require('lodash');
-const { supportedActionFormat, notSupported } = require('./constant');
-const { getModifier } = require('./util');
+import chalk from 'chalk';
+import _ from 'lodash';
+import { supportedActionFormat, notSupported } from './constant';
+import { getModifier } from './util';
 
-module.exports = class ActionNodeFinder {
-  constructor(graph, nodeInfo) {
+export default class ActionNodeFinder {
+  graph: any;
+  nodeInfo: any;
+
+  constructor(graph: any, nodeInfo: any) {
     this.graph = graph;
     this.nodeInfo = nodeInfo;
   }
 
-  getActionNodes(rootNode, conditions) {
+  getActionNodes(rootNode: any, conditions?: any): any {
     let targetNodeInfo = this.graph[rootNode.uid];
 
     // Nodes without sourceoutput are considered 'else' nodes,
@@ -34,7 +37,7 @@ module.exports = class ActionNodeFinder {
     return actionNodes;
   }
 
-  findDests(prevNode, destNode) {
+  findDests(prevNode: any, destNode: any) {
     const modifiers = getModifier(this.graph, prevNode, destNode);
 
     if (supportedActionFormat.includes(destNode.type)) {
@@ -115,7 +118,7 @@ module.exports = class ActionNodeFinder {
           const elseNextDestNodes = this.getActionNodes(destNode, false);
 
           let conditionStmt = '';
-          destNode.config.conditions.map((cond, idx) => {
+          destNode.config.conditions.map((cond: any, idx: number) => {
             const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
 
             // * About match mode

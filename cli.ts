@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const meow = require('meow');
-const converter = require('./converter');
+import meow from 'meow';
+import converter from './converter';
 
 const cli = meow(
   `
@@ -9,10 +9,7 @@ const cli = meow(
 
 	Examples
 	  $ arvis-plist-converter info.plist
-`,
-  {
-    flags: {}
-  }
+`
 );
 
 if (cli.input.length === 1) {
@@ -20,4 +17,3 @@ if (cli.input.length === 1) {
 } else if (cli.input.length > 1) {
   converter(cli.input[0], cli.input[1]);
 }
-

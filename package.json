@@ -8,15 +8,16 @@
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"
 	},
-	"main": "index.js",
+	"main": "dist/index.js",
 	"bin": {
-		"arvis-plist-converter": "cli.js"
+		"arvis-plist-converter": "dist/cli.js"
 	},
 	"engines": {
 		"node": ">=12"
 	},
 	"scripts": {
 		"test": "xo && ava",
+		"build": "tsc",
 		"local-install": "npm i -g ./"
 	},
 	"keywords": [
@@ -31,8 +32,14 @@
 		"plist": "^3.0.1"
 	},
 	"devDependencies": {
+		"@types/chalk": "^2.2.0",
+		"@types/fs-extra": "^9.0.11",
+		"@types/lodash": "^4.14.170",
+		"@types/meow": "^6.0.0",
+		"@types/plist": "^3.0.2",
 		"ava": "^2.1.0",
 		"execa": "^2.0.0",
+		"typescript": "^4.3.2",
 		"xo": "^0.24.0"
 	}
 }

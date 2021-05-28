@@ -30,9 +30,10 @@ const modifierMap = {
   8388608: 'fn'
 };
 
-module.exports = {
+export {
   notSupported,
   modifierMap,
-  supportedInputFormat,
-  supportedActionFormat
-};
+  supportedActionFormat,
+  supportedInputFormat
+}
+

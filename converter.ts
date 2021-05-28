@@ -1,14 +1,14 @@
-const plist = require('plist');
-const fs = require('fs');
-const fse = require('fs-extra');
-const chalk = require('chalk');
-const _ = require('lodash');
-const ActionNodeFinder = require('./actionNodeFinder');
-const { modifierMap, supportedInputFormat } = require('./constant');
-const path = require('path');
+import plist from 'plist';
+import fs from 'fs';
+import fse from 'fs-extra';
+import chalk from 'chalk';
+import _ from 'lodash';
+import ActionNodeFinder from './actionNodeFinder';
+import { modifierMap, supportedInputFormat } from './constant';
+import path from 'path';
 
-const getInputObjects = nodeInfo => {
-  let inputObjects = [];
+const getInputObjects = (nodeInfo: any) => {
+  let inputObjects: any[] = [];
   for (const format of supportedInputFormat) {
     inputObjects = [
       ...inputObjects,
@@ -20,10 +20,10 @@ const getInputObjects = nodeInfo => {
   return inputObjects;
 };
 
-const convertHotkey = (hotmod, hotstring) => {
+const convertHotkey = (hotmod: any, hotstring: string) => {
   let hotkey = hotmod;
   if (hotmod) {
-    const modifiers = modifierMap[hotmod];
+    const modifiers = (modifierMap as any)[hotmod];
     if (hotstring) {
       if (hotstring === 'double tap') {
         hotkey = `Double ${modifiers}`;
@@ -38,7 +38,7 @@ const convertHotkey = (hotmod, hotstring) => {
   return hotkey;
 };
 
-const convertArgumentType = (argumenttype) => {
+const convertArgumentType = (argumenttype: any) => {
   if (argumenttype === 0) {
     return 'required';
   }
@@ -48,9 +48,12 @@ const convertArgumentType = (argumenttype) => {
   if (argumenttype === 2) {
     return 'no';
   }
+
+  console.error('argumenttype in not proper!');
+  return 'optional';
 }
 
-const convert = async (plistPath, outputPath) => {
+const convert = async (plistPath: string, outputPath?: string) => {
   const pathArr = plistPath.split(path.sep);
   pathArr.pop();
   const plistDirPath = pathArr.join(path.sep);
@@ -61,7 +64,7 @@ const convert = async (plistPath, outputPath) => {
   }
 
   if (fs.existsSync(plistPath)) {
-    const targetPlist = plist.parse(fs.readFileSync(plistPath, 'utf8'));
+    const targetPlist: any = plist.parse(fs.readFileSync(plistPath, 'utf8'));
     const {
       bundleid: bundleId,
       category,
@@ -74,7 +77,7 @@ const convert = async (plistPath, outputPath) => {
     } = targetPlist;
 
     if (!bundleId) {
-      throw new Error('bundleId is not set on info.plist, parsed plist: ', targetPlist);
+      throw new Error('bundleId is not set on info.plist, parsed plist: ' + targetPlist);
     }
 
     const result = {
@@ -89,7 +92,7 @@ const convert = async (plistPath, outputPath) => {
       version,
       webaddress,
       enabled: true,
-      commands: []
+      commands: [] as any[]
     };
 
     const graph = targetPlist.connections;
@@ -175,4 +178,4 @@ const convert = async (plistPath, outputPath) => {
   }
 };
 
-module.exports = convert;
+export default convert;
