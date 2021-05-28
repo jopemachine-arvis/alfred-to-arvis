@@ -22,7 +22,7 @@
 	},
 	"scripts": {
 		"test": "xo && ava",
-		"build": "tsc",
+		"build": "cp external/meow/index.d.ts node_modules/meow/index.d.ts && tsc",
 		"local-install": "npm i -g ./"
 	},
 	"keywords": [
