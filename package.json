@@ -1,5 +1,5 @@
 {
-	"name": "arvis-plist-converter",
+	"name": "@jopemachine/arvis-plist-converter",
 	"version": "0.0.1",
 	"description": "Convert the info.plist file format of Alfred-workflow's to the arvis-workflow.json",
 	"license": "MIT",
@@ -10,8 +10,7 @@
 	},
 	"files": [
 		"dist/*.js",
-		"readme.md",
-		"index.d.ts"
+		"readme.md"
 	],
 	"main": "dist/index.js",
 	"bin": {
