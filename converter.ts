@@ -66,7 +66,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
   if (fs.existsSync(plistPath)) {
     const targetPlist: any = plist.parse(fs.readFileSync(plistPath, 'utf8'));
     const {
-      bundleid: bundleId,
+      bundleid,
       category,
       createdby,
       description,
@@ -76,14 +76,31 @@ const convert = async (plistPath: string, outputPath?: string) => {
       webaddress
     } = targetPlist;
 
-    if (!bundleId) {
-      throw new Error('bundleId is not set on info.plist, parsed plist: ' + targetPlist);
+    let bundleId;
+    if (!name || !createdby) {
+      console.error(
+        chalk.redBright(
+          'There is missing name or createdby. Please make sure to fill this before creating workflow'
+        )
+      );
+    }
+
+    if (name && createdby) {
+      bundleId = `@${createdby}/${name}`;
+    } else if (name) {
+      bundleId = `@unknown/${name}`;
+    } else if (bundleid) {
+      bundleId = bundleid;
+    } else {
+      throw new Error(
+        'Required attributes are not set on info.plist, parsed plist: ' +
+          targetPlist
+      );
     }
 
     const result = {
       $schema: 'https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json',
       defaultIcon,
-      bundleId,
       category,
       createdby,
       description,
