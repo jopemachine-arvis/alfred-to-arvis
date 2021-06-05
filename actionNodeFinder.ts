@@ -188,7 +188,6 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'keyword',
             keyword: destNode.config.keyword,
-            withspace: destNode.config.withspace,
             title: destNode.config.title,
             subtitle: destNode.config.subtext,
             action: nextDestNodes

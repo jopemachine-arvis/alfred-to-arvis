@@ -86,9 +86,9 @@ const convert = async (plistPath: string, outputPath?: string) => {
     }
 
     if (name && createdby) {
-      bundleId = `@${createdby}/${name}`;
+      bundleId = `@${createdby}.${name}`;
     } else if (name) {
-      bundleId = `@unknown/${name}`;
+      bundleId = `@unknown.${name}`;
     } else if (bundleid) {
       bundleId = bundleid;
     } else {
