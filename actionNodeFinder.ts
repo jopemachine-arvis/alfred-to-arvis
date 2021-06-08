@@ -113,6 +113,33 @@ export default class ActionNodeFinder {
           };
         }
 
+        case 'alfred.workflow.utility.filter': {
+          const thenNextDestNodes = this.getActionNodes(destNode);
+
+          let conditionStmt = '';
+          const cond = destNode.config;
+          const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
+
+          if (cond.matchmode === 0) {
+            conditionStmt += `{${arg}} == "${cond.matchstring}"`;
+          } else if (cond.matchmode === 1) {
+            conditionStmt += `{${arg}} != "${cond.matchstring}"`;
+          } else if (cond.matchmode === 2) {
+            conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`;
+          }
+
+          return {
+            modifiers,
+            type: 'cond',
+            if: {
+              cond: conditionStmt,
+              action: {
+                then: thenNextDestNodes
+              }
+            }
+          };
+        }
+
         case 'alfred.workflow.utility.conditional': {
           const thenNextDestNodes = this.getActionNodes(destNode, true);
           const elseNextDestNodes = this.getActionNodes(destNode, false);
@@ -177,7 +204,7 @@ export default class ActionNodeFinder {
             script_filter: destNode.config.script,
             running_subtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
-            action: nextDestNodes,
+            action: nextDestNodes
           };
         }
 
@@ -208,4 +235,4 @@ export default class ActionNodeFinder {
       };
     }
   }
-};
+}

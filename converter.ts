@@ -182,7 +182,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
       }
     }
 
-    const out = outputPath ? outputPath : `${bundleId}.json`;
+    const out = outputPath ? outputPath : `arvis-workflow.json`;
 
     await fse.writeJSON(out, result, {
       encoding: 'utf-8',

@@ -5,15 +5,16 @@ const supportedInputFormat = [
 ];
 
 const supportedActionFormat = [
-  'alfred.workflow.output.notification',
   'alfred.workflow.action.openfile',
-  'alfred.workflow.action.script',
   'alfred.workflow.action.openurl',
-  'alfred.workflow.output.clipboard',
-  'alfred.workflow.utility.conditional',
-  'alfred.workflow.utility.argument',
+  'alfred.workflow.action.script',
+  'alfred.workflow.input.keyword',
   'alfred.workflow.input.scriptfilter',
-  'alfred.workflow.input.keyword'
+  'alfred.workflow.output.clipboard',
+  'alfred.workflow.output.notification',
+  'alfred.workflow.utility.argument',
+  'alfred.workflow.utility.conditional',
+  'alfred.workflow.utility.filter',
 ];
 
 const notSupported = () => {
@@ -25,7 +26,7 @@ const modifierMap = {
   0: 'normal',
   131072: 'shift',
   262144: 'ctrl',
-  524288: 'option',
+  524288: 'opt',
   1048576: 'cmd',
   8388608: 'fn'
 };
