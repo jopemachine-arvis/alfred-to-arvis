@@ -73,7 +73,8 @@ const convert = async (plistPath: string, outputPath?: string) => {
       name,
       readme,
       version,
-      webaddress
+      webaddress,
+      variables
     } = targetPlist;
 
     let bundleId;
@@ -109,6 +110,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
       version,
       webaddress,
       enabled: true,
+      variables,
       commands: [] as any[]
     };
 
