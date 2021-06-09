@@ -1,7 +1,7 @@
 {
 	"name": "@jopemachine/arvis-plist-converter",
 	"version": "0.1.5",
-	"description": "Convert the info.plist file format of Alfred-workflow's to the arvis-workflow.json",
+	"description": "Help to convert the info.plist file format of Alfred-workflow's to the arvis-workflow.json",
 	"license": "MIT",
 	"repository": "jopemachine/arvis-plist-converter",
 	"author": {
@@ -12,8 +12,7 @@
 		"dist/*.js",
 		"index.d.ts",
 		"readme.md",
-		"LICENSE",
-		"package.json"
+		"LICENSE"
 	],
 	"main": "dist/index.js",
 	"bin": {
@@ -28,6 +27,9 @@
 	},
 	"keywords": [
 		"arvis",
+		"arvis-workflow",
+		"alfred",
+		"alfred-workflow",
 		"cli"
 	],
 	"dependencies": {
