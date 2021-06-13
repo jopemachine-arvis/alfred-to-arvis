@@ -5,10 +5,10 @@ import converter from './converter';
 const cli = meow(
   `
 	Usage
-	  $ arvis-plist-converter [alfred workflow's "info.plist" file]
+	  $ alfred-to-arvis [alfred workflow's "info.plist" file]
 
 	Examples
-	  $ arvis-plist-converter info.plist
+	  $ alfred-to-arvis info.plist
 `
 );
 

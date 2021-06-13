@@ -49,7 +49,7 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'script',
             script: destNode.config.script,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
+            actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
@@ -61,7 +61,7 @@ export default class ActionNodeFinder {
             type: 'notification',
             title: destNode.config.title,
             text: destNode.config.text,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
+            actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
@@ -77,7 +77,7 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'open',
             target,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
+            actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
@@ -93,7 +93,7 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'open',
             target,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
+            actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
@@ -109,7 +109,7 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'clipboard',
             text: destNode.config.clipboardtext,
-            action: nextDestNodes.length > 0 ? nextDestNodes : undefined
+            actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
 
@@ -133,7 +133,7 @@ export default class ActionNodeFinder {
             type: 'cond',
             if: {
               cond: conditionStmt,
-              action: {
+              actions: {
                 then: thenNextDestNodes
               }
             }
@@ -175,7 +175,7 @@ export default class ActionNodeFinder {
             type: 'cond',
             if: {
               cond: conditionStmt,
-              action: {
+              actions: {
                 then: thenNextDestNodes,
                 else: elseNextDestNodes
               }
@@ -189,7 +189,7 @@ export default class ActionNodeFinder {
             modifiers,
             type: 'args',
             arg: destNode.config.argument,
-            action: nextDestNodes
+            actions: nextDestNodes
           };
         }
 
@@ -201,10 +201,10 @@ export default class ActionNodeFinder {
             command: destNode.config.keyword,
             title: destNode.config.title,
             type: 'scriptfilter',
-            script_filter: destNode.config.script,
-            running_subtext: destNode.config.runningsubtext,
+            scriptFilter: destNode.config.script,
+            runningSubtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
-            action: nextDestNodes
+            actions: nextDestNodes
           };
         }
 
@@ -217,7 +217,7 @@ export default class ActionNodeFinder {
             keyword: destNode.config.keyword,
             title: destNode.config.title,
             subtitle: destNode.config.subtext,
-            action: nextDestNodes
+            actions: nextDestNodes
           };
         }
         default:

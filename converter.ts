@@ -68,26 +68,26 @@ const convert = async (plistPath: string, outputPath?: string) => {
     const {
       bundleid,
       category,
-      createdby,
+      createdby: creator,
       description,
       name,
       readme,
       version,
-      webaddress,
+      webaddress: webAddress,
       variables
     } = targetPlist;
 
     let bundleId;
-    if (!name || !createdby) {
+    if (!name || !creator) {
       console.error(
         chalk.redBright(
-          'There is missing name or createdby. Please make sure to fill this before creating workflow'
+          'There is missing "name" or "creator". Please make sure to fill this before creating workflow'
         )
       );
     }
 
-    if (name && createdby) {
-      bundleId = `@${createdby}.${name}`;
+    if (name && creator) {
+      bundleId = `@${creator}.${name}`;
     } else if (name) {
       bundleId = `@unknown.${name}`;
     } else if (bundleid) {
@@ -103,12 +103,12 @@ const convert = async (plistPath: string, outputPath?: string) => {
       $schema: 'https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json',
       defaultIcon,
       category,
-      createdby,
+      creator,
       description,
       name,
       readme,
       version,
-      webaddress,
+      webAddress,
       enabled: true,
       variables,
       commands: [] as any[]
@@ -135,11 +135,11 @@ const convert = async (plistPath: string, outputPath?: string) => {
         script,
         withspace,
         argumenttype,
-        runningsubtext: running_subtext,
+        runningsubtext: runningSubtext,
       } = inputObject.config;
 
       const hotkey = convertHotkey(hotmod, hotstring);
-      const arg_type = convertArgumentType(argumenttype);
+      const argType = convertArgumentType(argumenttype);
       const inputType = inputObject.type;
       const type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
@@ -168,12 +168,12 @@ const convert = async (plistPath: string, outputPath?: string) => {
           command: keyword,
           title: title || text,
           subtitle,
-          script_filter: script,
-          running_subtext,
+          scriptFilter: script,
+          runningSubtext,
           withspace,
           hotkey,
-          arg_type,
-          action: actionNodes
+          argType,
+          actions: actionNodes
         });
       } else {
         console.log(
