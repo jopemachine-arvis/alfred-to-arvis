@@ -1,4 +1,8 @@
 # alfred-to-arvis
+[![NPM version](https://badge.fury.io/js/alfred-to-arvis.svg)](http://badge.fury.io/js/alfred-to-arvis)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+[![GitHub issues](https://img.shields.io/github/issues/jopemachine/alfred-to-arvis.svg)](https://GitHub.com/jopemachine/alfred-to-arvis/issues/)
 
 > Help you convert Alfred workflow's `info.plist` to `arvis-workflow.json` of [Arvis](https://github.com/jopemachine/arvis)
 
@@ -8,7 +12,9 @@
 
 * This means some parts of this package may not work as per Alfred's update.
 
-* Not all items are supported for conversion. Check [here](./constant.ts) to find out which items will be converted.
+* Not all type's items are supported for conversion. Check [here](./constant.ts) to find out which items will be converted.
+
+* Unsupported types are displayed in console, json both if there are
 
 ## Getting started
 
