@@ -100,7 +100,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
     }
 
     const result = {
-      $schema: 'https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json',
+      $schema: 'https://raw.githubusercontent.com/jopemachine/arvis-extension-validator/master/workflow-schema.json',
       defaultIcon,
       category,
       creator,

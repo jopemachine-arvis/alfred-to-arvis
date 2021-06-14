@@ -1,6 +1,6 @@
 {
 	"name": "alfred-to-arvis",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Help to convert the info.plist file format of Alfred-workflow's to the arvis-workflow.json",
 	"license": "MIT",
 	"repository": "jopemachine/alfred-to-arvis",
