@@ -200,7 +200,7 @@ export default class ActionNodeFinder {
             modifiers,
             command: destNode.config.keyword,
             title: destNode.config.title,
-            type: 'scriptfilter',
+            type: 'scriptFilter',
             scriptFilter: destNode.config.script,
             runningSubtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
