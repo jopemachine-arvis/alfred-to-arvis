@@ -1,4 +1,5 @@
 # alfred-to-arvis
+[![CodeFactor](https://www.codefactor.io/repository/github/jopemachine/alfred-to-arvis/badge)](https://www.codefactor.io/repository/github/jopemachine/alfred-to-arvis)
 [![NPM download total](https://img.shields.io/npm/dt/alfred-to-arvis)](http://badge.fury.io/js/alfred-to-arvis)
 [![NPM version](https://badge.fury.io/js/alfred-to-arvis.svg)](http://badge.fury.io/js/alfred-to-arvis)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
