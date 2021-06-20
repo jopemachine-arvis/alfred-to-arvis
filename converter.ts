@@ -141,7 +141,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
       const hotkey = convertHotkey(hotmod, hotstring);
       const argType = convertArgumentType(argumenttype);
       const inputType = inputObject.type;
-      const type = inputType.split('.')[inputType.split('.').length - 1];
+      let type = inputType.split('.')[inputType.split('.').length - 1];
       const keyword = inputObject.config.keyword;
 
       let appendNode = graph[uid];
@@ -155,6 +155,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
           break;
         }
         case 'alfred.workflow.input.scriptfilter': {
+          type = 'scriptFilter';
           appendNode = script && keyword && keyword !== '';
           break;
         }
