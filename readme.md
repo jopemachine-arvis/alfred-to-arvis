@@ -14,7 +14,7 @@
 
 * This means some parts of this package may not work as per Alfred's update.
 
-* Not all type's items are supported for conversion. Check [here](./constant.ts) to find out which items will be converted.
+* Not all type's items are supported for conversion. Check [here](./constant.ts) to find out which items can be converted.
 
 * Unsupported types are displayed in console, json both if there are
 
