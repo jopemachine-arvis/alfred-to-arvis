@@ -37,3 +37,7 @@ $ alfred-to-arvis [alfred workflow's "info.plist" file]
 ```
 $ npm i && npm run build
 ```
+
+## Related
+
+- [arvish](https://github.com/jopemachine/arvish) - Arvis workflow, plugin creator tools
