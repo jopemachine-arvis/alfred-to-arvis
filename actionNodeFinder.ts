@@ -44,11 +44,12 @@ export default class ActionNodeFinder {
       switch (destNode.type) {
         case 'alfred.workflow.action.script': {
           const nextDestNodes = this.getActionNodes(destNode);
+          const script = destNode.config.script.replace('./node_modules/.bin/run-node', 'node');
 
           return {
             modifiers,
             type: 'script',
-            script: destNode.config.script,
+            script,
             actions: nextDestNodes.length > 0 ? nextDestNodes : undefined
           };
         }
@@ -146,7 +147,7 @@ export default class ActionNodeFinder {
 
           let conditionStmt = '';
           destNode.config.conditions.map((cond: any, idx: number) => {
-            const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
+            const arg = cond.inputstring === '' ? '{query}' : cond.inputstring;
 
             // * About match mode
             // 0: true when match
@@ -155,15 +156,15 @@ export default class ActionNodeFinder {
             // 3: lesser than
             // 4: regex match
             if (cond.matchmode === 0) {
-              conditionStmt += `{${arg}} == "${cond.matchstring}"`;
+              conditionStmt += `${arg} == "${cond.matchstring}"`;
             } else if (cond.matchmode === 1) {
-              conditionStmt += `{${arg}} != "${cond.matchstring}"`;
+              conditionStmt += `${arg} != "${cond.matchstring}"`;
             } else if (cond.matchmode === 2) {
-              conditionStmt += `{${arg}} > "${cond.matchstring}"`;
+              conditionStmt += `${arg} > "${cond.matchstring}"`;
             } else if (cond.matchmode === 3) {
-              conditionStmt += `{${arg}} < "${cond.matchstring}"`;
+              conditionStmt += `${arg} < "${cond.matchstring}"`;
             } else if (cond.matchmode === 4) {
-              conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`;
+              conditionStmt += `new RegExp("${cond.matchstring}").test(${arg})`;
             }
 
             if (idx !== destNode.config.conditions.length - 1)
@@ -195,13 +196,14 @@ export default class ActionNodeFinder {
 
         case 'alfred.workflow.input.scriptfilter': {
           const nextDestNodes = this.getActionNodes(destNode);
+          const script = destNode.config.script.replace('./node_modules/.bin/run-node', 'node');
 
           return {
             modifiers,
             command: destNode.config.keyword,
             title: destNode.config.title,
             type: 'scriptFilter',
-            scriptFilter: destNode.config.script,
+            scriptFilter: script,
             runningSubtext: destNode.config.runningsubtext,
             withspace: destNode.config.withspace,
             actions: nextDestNodes
