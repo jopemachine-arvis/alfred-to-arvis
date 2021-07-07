@@ -54,15 +54,6 @@ const convertArgumentType = (argumenttype: any) => {
 }
 
 const convert = async (plistPath: string, outputPath?: string) => {
-  const pathArr = plistPath.split(path.sep);
-  pathArr.pop();
-  const plistDirPath = pathArr.join(path.sep);
-
-  let defaultIcon;
-  if (fse.existsSync(`${plistDirPath}${path.sep}icon.png`)) {
-    defaultIcon = 'icon.png';
-  }
-
   if (fs.existsSync(plistPath)) {
     const targetPlist: any = plist.parse(fs.readFileSync(plistPath, 'utf8'));
     const {
@@ -101,7 +92,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
 
     const result = {
       $schema: 'https://raw.githubusercontent.com/jopemachine/arvis-extension-validator/master/workflow-schema.json',
-      defaultIcon,
+      defaultIcon: 'icon.png',
       category,
       creator,
       description,

@@ -1,12 +1,15 @@
 {
 	"name": "alfred-to-arvis",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Help to convert the info.plist file format of Alfred-workflow's to the arvis-workflow.json",
 	"license": "MIT",
 	"repository": "jopemachine/alfred-to-arvis",
 	"author": {
 		"name": "jopemachine",
 		"email": "jopemachine@gmail.com"
+	},
+	"bugs": {
+		"url": "https://github.com/jopemachine/alfred-to-arvis"
 	},
 	"files": [
 		"dist/*.js",
@@ -23,7 +26,7 @@
 	},
 	"scripts": {
 		"test": "xo && ava",
-		"build": "cp external/meow/index.d.ts node_modules/meow/index.d.ts && tsc"
+		"build": "tsc"
 	},
 	"keywords": [
 		"arvis",

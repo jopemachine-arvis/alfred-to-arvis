@@ -118,14 +118,14 @@ export default class ActionNodeFinder {
 
           let conditionStmt = '';
           const cond = destNode.config;
-          const arg = cond.inputstring === '' ? 'query' : cond.inputstring;
+          const arg = cond.inputstring === '' ? '{query}' : cond.inputstring;
 
           if (cond.matchmode === 0) {
-            conditionStmt += `{${arg}} == "${cond.matchstring}"`;
+            conditionStmt += `${arg} == "${cond.matchstring}"`;
           } else if (cond.matchmode === 1) {
-            conditionStmt += `{${arg}} != "${cond.matchstring}"`;
+            conditionStmt += `${arg} != "${cond.matchstring}"`;
           } else if (cond.matchmode === 2) {
-            conditionStmt += `new RegExp("${cond.matchstring}").test({${arg}})`;
+            conditionStmt += `new RegExp("${cond.matchstring}").test(${arg})`;
           }
 
           return {
