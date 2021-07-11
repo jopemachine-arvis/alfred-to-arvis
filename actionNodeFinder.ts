@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 import { supportedActionFormat, notSupported } from './constant';
-import { getModifier } from './util';
+import { getModifier, removeRunNode } from './util';
 
 export default class ActionNodeFinder {
   graph: any;
@@ -44,7 +44,7 @@ export default class ActionNodeFinder {
       switch (destNode.type) {
         case 'alfred.workflow.action.script': {
           const nextDestNodes = this.getActionNodes(destNode);
-          const script = destNode.config.script.replace('./node_modules/.bin/run-node', 'node');
+          const script = removeRunNode(destNode.config.script);
 
           return {
             modifiers,
@@ -196,7 +196,7 @@ export default class ActionNodeFinder {
 
         case 'alfred.workflow.input.scriptfilter': {
           const nextDestNodes = this.getActionNodes(destNode);
-          const script = destNode.config.script.replace('./node_modules/.bin/run-node', 'node');
+          const script = removeRunNode(destNode.config.script);
 
           return {
             modifiers,

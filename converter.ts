@@ -4,8 +4,8 @@ import fse from 'fs-extra';
 import chalk from 'chalk';
 import _ from 'lodash';
 import ActionNodeFinder from './actionNodeFinder';
+import { removeRunNode } from './util';
 import { modifierMap, supportedInputFormat } from './constant';
-import path from 'path';
 
 const getInputObjects = (nodeInfo: any) => {
   let inputObjects: any[] = [];
@@ -160,7 +160,7 @@ const convert = async (plistPath: string, outputPath?: string) => {
           command: keyword,
           title: title || text,
           subtitle,
-          scriptFilter: script,
+          scriptFilter: removeRunNode(script),
           runningSubtext,
           withspace,
           hotkey,

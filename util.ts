@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { modifierMap } from './constant';
 
-const getModifier = (graph: any, prevNode: any, destNode: any) => {
+export const getModifier = (graph: any, prevNode: any, destNode: any) => {
   return (modifierMap as any)[
     _.filter(
       graph[prevNode.uid],
@@ -10,4 +10,6 @@ const getModifier = (graph: any, prevNode: any, destNode: any) => {
   ];
 };
 
-export { getModifier };
+export const removeRunNode = (script: string) => {
+  return script.replace('./node_modules/.bin/run-node', 'node');
+};
